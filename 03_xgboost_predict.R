@@ -18,4 +18,6 @@ task_test <- TaskRegr$new(
   backend = test_data, 
   target = "price"
 )
-preds_test_data <- as.data.table(learner_xgboost$predict(task_test))
+preds_test_data <- learner_xgboost$predict(task_test)
+preds_test_data$score(msrs(c("regr.mae", "regr.mape")))
+preds_test_data <- as.data.table(preds_test_data)
