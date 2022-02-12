@@ -2,7 +2,7 @@
 output:
   revealjs::revealjs_presentation:
     transition: slide
-    self_contained: false
+    self_contained: true
     css: white-helv.css
     highlight: default
     fig_height: 4
