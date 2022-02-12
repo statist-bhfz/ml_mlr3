@@ -45,7 +45,7 @@ task_valid_early_stopping <- TaskRegr$new(
 
 # Граф вычислений для кодировки факторов при помощи 
 # conditional target value impact encoding
-# https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_encodeimpact.html
+# https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_encodeimpact.html
 gr <- 
   po("fixfactors") %>>% 
   po("encodeimpact", impute_zero = TRUE)

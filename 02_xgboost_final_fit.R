@@ -25,7 +25,7 @@ split <- sample(
 
 # Предварительная трансформация данных для early stopping
 task_train <- TaskRegr$new(
-  id = "dprice", 
+  id = "price", 
   backend = dt[split %in% c("train", "val")], 
   target = "price"
 )
