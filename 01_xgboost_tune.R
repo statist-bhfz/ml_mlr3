@@ -19,16 +19,12 @@ dt[, (cols) := lapply(.SD, as.factor), .SDcols = cols]
 # 10% оставляем для валидации при использовании early stopping
 # и еще 10% для проверки при тюнинге остальных гиперпараметров
 set.seed(42)
-split <- list(
-  train_index = sample(1:dt[, .N], size = 0.8 * dt[, .N])
+split <- sample(
+  c("train", "val", "val_early_stopping"), 
+  size = dt[, .N], 
+  prob = c(0.8, 0.1, 0.1), 
+  replace = TRUE
 )
-split$val_index <- setdiff(1:dt[, .N], split$train_index)
-set.seed(42)
-split$val_early_stopping_index <- sample(
-  split$val_index, 
-  round(length(split$val_index) / 2)
-)
-split$val_index <- setdiff(split$val_index, split$val_early_stopping_index)
 
 
 ###########################################################
@@ -38,12 +34,12 @@ split$val_index <- setdiff(split$val_index, split$val_early_stopping_index)
 # Задачи
 task_train <- TaskRegr$new(
   id = "price", 
-  backend = dt[split$train_index], 
+  backend = dt[split == "train"], 
   target = "price"
 )
 task_valid_early_stopping <- TaskRegr$new(
   id = "price_valid", 
-  backend = dt[split$val_early_stopping_index], 
+  backend = dt[split == "val_early_stopping"], 
   target = "price"
 )
 
@@ -81,8 +77,8 @@ task <- TaskRegr$new(
 resampling_custom <- rsmp("custom")
 resampling_custom$instantiate(
   task, 
-  list(split$train_index), 
-  list(split$val_index)
+  list(dt[, .(id = .I)][split == "train", id]), 
+  list(dt[, .(id = .I)][split == "val", id])
 )
 
 # Модель xgboost

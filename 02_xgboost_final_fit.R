@@ -16,26 +16,22 @@ dt[, (cols) := lapply(.SD, as.factor), .SDcols = cols]
 # Подбор оптимального числа деревьев при помощи early stopping
 # 10% оставляем для валидации при использовании early stopping
 set.seed(42)
-split <- list(
-  train_index = sample(1:dt[, .N], size = 0.8 * dt[, .N])
+split <- sample(
+  c("train", "val", "val_early_stopping"), 
+  size = dt[, .N], 
+  prob = c(0.8, 0.1, 0.1), 
+  replace = TRUE
 )
-split$val_index <- setdiff(1:dt[, .N], split$train_index)
-set.seed(42)
-split$val_early_stopping_index <- sample(
-  split$val_index, 
-  round(length(split$val_index) / 2)
-)
-split$val_index <- setdiff(split$val_index, split$val_early_stopping_index)
 
 # Предварительная трансформация данных для early stopping
 task_train <- TaskRegr$new(
   id = "dprice", 
-  backend = dt[c(split$train_index, split$val_index)], 
+  backend = dt[split %in% c("train", "val")], 
   target = "price"
 )
 task_valid_early_stopping <- TaskRegr$new(
   id = "price_valid", 
-  backend = dt[split$val_early_stopping_index], 
+  backend = dt[split == "val_early_stopping"], 
   target = "price"
 )
 gr <- 

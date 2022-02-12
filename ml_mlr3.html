@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>ml_mlr3.knit</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="ml_mlr3_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="ml_mlr3_files/reveal.js-3.3.0.1/css/theme/simple.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="white-helv.css"/>
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="ml_mlr3_files/header-attrs-2.11/header-attrs.js"></script>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section>
+<section id="машинное-обучение-с-использованием-пакета-mlr3" class="title-slide slide level1">
+<h1>Машинное обучение с использованием пакета mlr3</h1>
+<p>© Андрей Огурцов</p>
+<p><img data-src="mlr3_pics/logo.PNG" alt="logo" /></p>
+</section>
+<section id="план" class="slide level2">
+<h2>План</h2>
+<ol type="1">
+<li><p>Обзор ML-фреймворков на R</p></li>
+<li><p>Экосистема mlr3</p></li>
+<li><p>Основные составляющие ML-пайплайна в mlr3</p></li>
+<li><p>Пайпы и графы</p></li>
+<li><p>Пример решения реальной задачи с использованием GPU-версии <code>xgboost</code> внутри mlr3</p></li>
+<li><p>Полезные ссылки</p></li>
+<li><p>Вопросы и ответы</p></li>
+</ol>
+</section>
+<section id="ml-фреймворки-на-r" class="slide level2">
+<h2>ML-фреймворки на R</h2>
+<ol type="1">
+<li><strong>mlr3: <code>mlr3</code>+<code>mlr3pipelines</code>+<code>mlr3learners</code>+<code>mlr3tuning</code>+<code>mlr3measures</code>+…</strong></li>
+</ol>
+<p>Очень похож на <code>scikit-learn</code></p>
+<p>В основе лежат R6-классы, в качестве бекенда по умолчанию для табличных данных используется <code>data.table</code></p>
+<p>Все процессы построения моделей объединены в граф вычислений</p>
+<ol start="2" type="1">
+<li><strong>tidymodels: <code>rsample</code>+<code>recipes</code>+<code>parsnip</code>+<code>tune</code>+<code>yardstick</code>+…</strong></li>
+</ol>
+<p>Построен вокруг функций, а не объектов с методами, как mlr3 (но есть конвергентное сходство с mlr3)</p>
+<ol start="3" type="1">
+<li><strong>(2.5) H2O</strong></li>
+</ol>
+<p>Не совсем фреймворк и не совсем на R</p>
+</section>
+<section id="экосистема-mlr3" class="slide level2">
+<h2>Экосистема mlr3</h2>
+<p><img data-src="mlr3_pics/mlr3.PNG" alt="mlr3" /> <em>Source: <a href="https://mlr3book.mlr-org.com/introduction.html" class="uri">https://mlr3book.mlr-org.com/introduction.html</a></em></p>
+</section>
+<section id="экосистема-mlr3-продолжение" class="slide level2">
+<h2>Экосистема mlr3 (продолжение)</h2>
+<p><img data-src="mlr3_pics/mlr3verse.png" alt="mlr3verse" /></p>
+<p><em>Source: <a href="https://mlr3verse.mlr-org.com/" class="uri">https://mlr3verse.mlr-org.com/</a></em></p>
+</section>
+<section id="экосистема-mlr3-продолжение-1" class="slide level2">
+<h2>Экосистема mlr3 (продолжение)</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3verse)</span></code></pre></div>
+<p>Дополнительные пакеты:</p>
+<ul>
+<li><p>Analysis of benchmark experiments: <code>mlr3benchmark</code></p></li>
+<li><p>Task interface for data bases: <code>mlr3db</code></p></li>
+<li><p>Connector to OpenML: <code>mlr3oml</code></p></li>
+<li><p>Additional learners: <code>mlr3extralearners</code></p></li>
+<li><p>Hyperband tuning algorithm: <code>mlr3hyperband</code></p></li>
+<li><p>Spatio-temporal resampling: <code>mlr3spatiotempcv</code></p></li>
+<li><p>etc.</p></li>
+</ul>
+</section>
+<section id="основные-составляющие-ml-пайплайна" class="slide level2">
+<h2>Основные составляющие ML-пайплайна</h2>
+<p><img data-src="mlr3_pics/tuning.png" alt="tuning" /></p>
+<p><em>Source: <a href="https://mlr3book.mlr-org.com/optimization.html" class="uri">https://mlr3book.mlr-org.com/optimization.html</a></em></p>
+</section>
+<section id="основные-составляющие-ml-пайплайна-продолжение" class="slide level2">
+<h2>Основные составляющие ML-пайплайна (продолжение)</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Задача</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Sonar&quot;</span>, <span class="at">package =</span> <span class="st">&quot;mlbench&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>task <span class="ot">&lt;-</span> TaskClassif<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">&quot;Sonar&quot;</span>, <span class="at">backend =</span> Sonar, </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">target =</span> <span class="st">&quot;Class&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>task <span class="ot">&lt;-</span> <span class="fu">as_task_classif</span>(Sonar, <span class="at">target =</span> <span class="st">&quot;Class&quot;</span>, </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">positive =</span> <span class="st">&quot;M&quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>task</span></code></pre></div>
+<pre><code>## &lt;TaskClassif:Sonar&gt; (208 x 61)
+## * Target: Class
+## * Properties: twoclass
+## * Features (60):
+##   - dbl (60): V1, V10, V11, V12, V13, V14, V15, V16, V17, V18, V19, V2,
+##     V20, V21, V22, V23, V24, V25, V26, V27, V28, V29, V3, V30, V31,
+##     V32, V33, V34, V35, V36, V37, V38, V39, V4, V40, V41, V42, V43,
+##     V44, V45, V46, V47, V48, V49, V5, V50, V51, V52, V53, V54, V55,
+##     V56, V57, V58, V59, V6, V60, V7, V8, V9</code></pre>
+</section>
+<section id="основные-составляющие-ml-пайплайна-продолжение-1" class="slide level2">
+<h2>Основные составляющие ML-пайплайна (продолжение)</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Модель</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>learner_rpart <span class="ot">&lt;-</span> LearnerClassif<span class="sc">$</span><span class="fu">new</span>(<span class="st">&quot;classif.rpart&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>learner_rpart <span class="ot">&lt;-</span> mlr_learners<span class="sc">$</span><span class="fu">get</span>(<span class="st">&quot;classif.rpart&quot;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>learner_rpart <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">&quot;classif.rpart&quot;</span>, </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">predict_type =</span> <span class="st">&quot;prob&quot;</span>, </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">minsplit =</span> <span class="dv">50</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>learner_rpart<span class="sc">$</span>param_set<span class="sc">$</span>values<span class="sc">$</span>minsplit <span class="ot">&lt;-</span> <span class="dv">33</span> <span class="co">#insert_named()</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>learner_rpart</span></code></pre></div>
+<pre><code>## &lt;LearnerClassifRpart:classif.rpart&gt;
+## * Model: -
+## * Parameters: xval=0, minsplit=33
+## * Packages: mlr3, rpart
+## * Predict Type: prob
+## * Feature types: logical, integer, numeric, factor, ordered
+## * Properties: importance, missings, multiclass, selected_features,
+##   twoclass, weights</code></pre>
+</section>
+<section id="основные-составляющие-ml-пайплайна-продолжение-2" class="slide level2">
+<h2>Основные составляющие ML-пайплайна (продолжение)</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Обучение</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>learner_rpart<span class="sc">$</span><span class="fu">train</span>(task, <span class="at">row_ids =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">120</span>) </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>learner_rpart<span class="sc">$</span>model</span></code></pre></div>
+<pre><code>## n= 120 
+## 
+## node), split, n, loss, yval, (yprob)
+##       * denotes terminal node
+## 
+## 1) root 120 23 R (0.19166667 0.80833333)  
+##   2) V31&lt; 0.4322 51 22 R (0.43137255 0.56862745)  
+##     4) V12&gt;=0.1694 31 10 M (0.67741935 0.32258065) *
+##     5) V12&lt; 0.1694 20  1 R (0.05000000 0.95000000) *
+##   3) V31&gt;=0.4322 69  1 R (0.01449275 0.98550725) *</code></pre>
+</section>
+<section id="основные-составляющие-ml-пайплайна-продолжение-3" class="slide level2">
+<h2>Основные составляющие ML-пайплайна (продолжение)</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Предсказание на новых данных</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> learner_rpart<span class="sc">$</span><span class="fu">predict_newdata</span>(<span class="at">newdata =</span> Sonar)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>preds</span></code></pre></div>
+<pre><code>## &lt;PredictionClassif&gt; for 208 observations:
+##     row_ids truth response     prob.M    prob.R
+##           1     R        R 0.05000000 0.9500000
+##           2     R        M 0.67741935 0.3225806
+##           3     R        R 0.01449275 0.9855072
+## ---                                            
+##         206     M        R 0.01449275 0.9855072
+##         207     M        R 0.01449275 0.9855072
+##         208     M        R 0.01449275 0.9855072</code></pre>
+</section>
+<section id="основные-составляющие-ml-пайплайна-продолжение-4" class="slide level2">
+<h2>Основные составляющие ML-пайплайна (продолжение)</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Кросс-валидация</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>cv3 <span class="ot">&lt;-</span> <span class="fu">rsmp</span>(<span class="st">&quot;cv&quot;</span>, <span class="at">folds =</span> <span class="dv">3</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>resample_results <span class="ot">&lt;-</span> <span class="fu">resample</span>(task, learner_rpart, cv3)</span></code></pre></div>
+<pre><code>## INFO  [15:31:20.369] [mlr3] Applying learner &#39;classif.rpart&#39; on task &#39;Sonar&#39; (iter 2/3) 
+## INFO  [15:31:20.454] [mlr3] Applying learner &#39;classif.rpart&#39; on task &#39;Sonar&#39; (iter 3/3) 
+## INFO  [15:31:20.503] [mlr3] Applying learner &#39;classif.rpart&#39; on task &#39;Sonar&#39; (iter 1/3)</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>resample_results</span></code></pre></div>
+<pre><code>## &lt;ResampleResult&gt; of 3 iterations
+## * Task: Sonar
+## * Learner: classif.rpart
+## * Warnings: 0 in 0 iterations
+## * Errors: 0 in 0 iterations</code></pre>
+</section>
+<section id="пайпы-и-графы" class="slide level2">
+<h2>Пайпы и графы</h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pca <span class="ot">&lt;-</span> <span class="fu">po</span>(<span class="st">&quot;pca&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>filter <span class="ot">&lt;-</span> <span class="fu">po</span>(<span class="st">&quot;filter&quot;</span>, </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">filter =</span> mlr3filters<span class="sc">::</span><span class="fu">flt</span>(<span class="st">&quot;variance&quot;</span>), </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">filter.frac =</span> <span class="fl">0.5</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>learner_po <span class="ot">&lt;-</span> <span class="fu">po</span>(<span class="st">&quot;learner&quot;</span>, </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">learner =</span> <span class="fu">lrn</span>(<span class="st">&quot;classif.rpart&quot;</span>))</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> pca <span class="sc">%&gt;&gt;%</span> filter <span class="sc">%&gt;&gt;%</span> learner_po</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>graph<span class="sc">$</span><span class="fu">plot</span>()</span></code></pre></div>
+<p><img src="ml_mlr3_files/figure-revealjs/unnamed-chunk-8-1.png" width="768" /></p>
+</section>
+<section id="пайпы-и-графы-продолжение" class="slide level2">
+<h2>Пайпы и графы (продолжение)</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3verse)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">data.table</span>(</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">3</span>), <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>), <span class="at">y =</span> <span class="dv">1</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>dt_test <span class="ot">&lt;-</span> <span class="fu">data.table</span>(</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>), <span class="at">y =</span> <span class="dv">1</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>task <span class="ot">&lt;-</span> TaskRegr<span class="sc">$</span><span class="fu">new</span>(<span class="st">&quot;y&quot;</span>, <span class="at">backend =</span> dt, </span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">target =</span> <span class="st">&quot;y&quot;</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>task_test <span class="ot">&lt;-</span> TaskRegr<span class="sc">$</span><span class="fu">new</span>(<span class="st">&quot;y_test&quot;</span>, <span class="at">backend =</span> dt_test, </span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>                          <span class="at">target =</span> <span class="st">&quot;y&quot;</span>)</span></code></pre></div>
+</section>
+<section id="пайпы-и-графы-продолжение-1" class="slide level2">
+<h2>Пайпы и графы (продолжение)</h2>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">po</span>(<span class="st">&quot;fixfactors&quot;</span>) <span class="sc">%&gt;&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;imputeoor&quot;</span>, <span class="at">affect_columns =</span> <span class="fu">selector_all</span>())</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>g<span class="sc">$</span><span class="fu">train</span>(task)</span></code></pre></div>
+<pre><code>## $imputeoor.output
+## &lt;TaskRegr:y&gt; (4 x 2)
+## * Target: y
+## * Properties: -
+## * Features (1):
+##   - fct (1): x</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>g<span class="sc">$</span><span class="fu">predict</span>(task_test)<span class="sc">$</span>imputeoor.output<span class="sc">$</span><span class="fu">data</span>()</span></code></pre></div>
+<pre><code>##    y        x
+## 1: 1        1
+## 2: 1        2
+## 3: 1        3
+## 4: 1        3
+## 5: 1 .MISSING</code></pre>
+</section>
+<section id="пайпы-и-графы-продолжение-2" class="slide level2">
+<h2>Пайпы и графы (продолжение)</h2>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">po</span>(<span class="st">&quot;imputeoor&quot;</span>) <span class="sc">%&gt;&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;fixfactors&quot;</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>g<span class="sc">$</span><span class="fu">train</span>(task)</span></code></pre></div>
+<pre><code>## $fixfactors.output
+## &lt;TaskRegr:y&gt; (4 x 2)
+## * Target: y
+## * Properties: -
+## * Features (1):
+##   - fct (1): x</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>g<span class="sc">$</span><span class="fu">predict</span>(task_test)<span class="sc">$</span>fixfactors.output<span class="sc">$</span><span class="fu">data</span>()</span></code></pre></div>
+<pre><code>##    y    x
+## 1: 1    1
+## 2: 1    2
+## 3: 1    3
+## 4: 1    3
+## 5: 1 &lt;NA&gt;</code></pre>
+</section>
+<section id="пайпы-и-графы-продолжение-3" class="slide level2">
+<h2>Пайпы и графы (продолжение)</h2>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">po</span>(<span class="st">&quot;fixfactors&quot;</span>) <span class="sc">%&gt;&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;imputemode&quot;</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>g<span class="sc">$</span><span class="fu">train</span>(task)</span></code></pre></div>
+<pre><code>## $imputemode.output
+## &lt;TaskRegr:y&gt; (4 x 2)
+## * Target: y
+## * Properties: -
+## * Features (1):
+##   - fct (1): x</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>g<span class="sc">$</span><span class="fu">predict</span>(task_test)<span class="sc">$</span>imputemode.output<span class="sc">$</span><span class="fu">data</span>()</span></code></pre></div>
+<pre><code>##    y x
+## 1: 1 1
+## 2: 1 2
+## 3: 1 3
+## 4: 1 3
+## 5: 1 3</code></pre>
+</section>
+<section id="полезные-ссылки" class="slide level2">
+<h2>Полезные ссылки</h2>
+<ul>
+<li><p>Учебник от разработчиков <a href="https://mlr3book.mlr-org.com/index.html" class="uri">https://mlr3book.mlr-org.com/index.html</a></p></li>
+<li><p>Шпаргалка <a href="https://cheatsheets.mlr-org.com/mlr3.pdf" class="uri">https://cheatsheets.mlr-org.com/mlr3.pdf</a></p></li>
+<li><p>Галерея примеров <a href="https://mlr3gallery.mlr-org.com/" class="uri">https://mlr3gallery.mlr-org.com/</a></p></li>
+<li><p>Слегка устаревший хабрапост <a href="https://habr.com/ru/company/ods/blog/491566/" class="uri">https://habr.com/ru/company/ods/blog/491566/</a></p></li>
+<li><p>Коннектор к <code>torch</code> с реализацией сети tabnet <a href="https://github.com/mlr-org/mlr3torch" class="uri">https://github.com/mlr-org/mlr3torch</a></p></li>
+<li><p>Интерпретация моделей mlr3 <a href="https://cran.r-project.org/web/packages/flashlight/vignettes/mlr3.html" class="uri">https://cran.r-project.org/web/packages/flashlight/vignettes/mlr3.html</a></p></li>
+</ul>
+</section>
+<section id="вопросы" class="slide level2">
+<h2>Вопросы</h2>
+<p><img data-src="mlr3_pics/questions.jpg" alt="mlr3" /></p>
+</section>
+<section id="спасибо-за-внимание" class="slide level2">
+<h2>Спасибо за внимание!</h2>
+<p>Презентация создана при помощи <strong>revealjs</strong></p>
+<p><a href="https://github.com/statist-bhfz/ml_mlr3">https://github.com/statist-bhfz/ml_mlr3</a></p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="ml_mlr3_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="ml_mlr3_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
